@@ -1,0 +1,25 @@
+<script>
+    var dd = window.dd || window.DingTalkPC;
+
+    var config = {
+        agentId: {{ agent_id }},
+        corpId: "{{ corp_id }}",
+        timeStamp: "{{ timestamp }}",
+        nonceStr: "{{ noncestr }}",
+        signature: "{{ signature }}",
+        jsApiList: [
+            "runtime.permission.requestAuthCode",
+            "biz.ding.post",
+            "biz.user.get",
+            "biz.contact.choose"
+        ]
+    };
+
+    dd.error(function (error) {
+        $.post("{% url 'collect-error' %}", "SDK Error: " + JSON.stringify({error: error, config: config}));
+        console.error(error.errorCode);
+        console.error(error.errorMessage);
+    });
+    dd.config(config);
+    console.log("dingding config done");
+</script>

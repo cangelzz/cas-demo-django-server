@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    {% if request.from_device == "pc" %}
+        <script src="//g.alicdn.com/dingding/dingtalk-pc-api/2.7.0/index.js"></script>
+    {% elif request.from_device == "mobile" %}
+        <script src="//g.alicdn.com/dingding/open-develop/1.5.1/dingtalk.js"></script>
+    {% endif %}
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+{% block nav %}
+{% endblock %}
+{% block main %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,61 @@
+{% extends "login.html" %}
+{% load dingding %}
+{% block head %}
+    {% if request.dingding %}
+        {% ding_config request %}
+
+        <script>
+            //console.log("{{ next }}");
+            dd.ready(function (res) {
+                dd.runtime.permission.requestAuthCode({
+                    corpId: "{{ corp_id }}",
+                    onSuccess: function (result) {
+                        var code = result.code;
+                        //console.log("code = " + result.code);
+                        dd.biz.user.get({
+                            onSuccess: function (info) {
+                                //console.log(info);
+                                location.href = "/dingding/login/?code=" + code + "&next={{ next }}&nick=" + info.nickName + "&avatar=" + info.avatar || "";
+                            },
+                            onFail: function (error) {
+                                $.post("{% url 'collect-error' %}", "GET USER INFO Error: " + JSON.stringify(error));
+                                location.href = "/dingding/login/?code=" + code + "&next={{ next }}";
+                            }
+                        });
+
+                    },
+
+                    onFail: function (error) {
+                        console.error(error);
+                        $.post("{% url 'collect-error' %}", "requestAuthCode Error: " + JSON.stringify(error));
+                        alter_login();
+                    }
+                });
+
+            });
+
+            var alter_login = function () {
+                $("h4").text("自动登录失败，请输入域信息登录").addClass("alert alert-danger");
+            };
+
+            $(document).ready(function () {
+                setTimeout(alter_login, 10000);
+            });
+
+            var count = 9;
+            var add_countdown = setInterval(function () {
+                if (count > 0) {
+                    $("h4").text("正在自动登录..." + count);
+                    count--;
+                }
+                else {
+                    clearInterval(add_countdown);
+                }
+            }, 1000);
+
+        </script>
+    {% endif %}
+{% endblock %}
+{% block login_hint %}
+    <h4 class="form-signin-heading text-center mt-2">{{ form_title }}</h4>
+{% endblock %}

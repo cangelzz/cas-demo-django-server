@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block main %}
+    <div class="container">
+        自动登录中，请稍候 ...
+        <div id="msg"></div>
+    </div>
+    {% if from == "pc" %}
+        <script>
+            $(document).ready(function () {
+                var config = {
+                    agentId: {{ agent_id }},
+                    corpId: "{{ corp_id }}",
+                    timeStamp: "{{ timestamp }}",
+                    nonceStr: "{{ noncestr }}",
+                    signature: "{{ signature }}",
+                    jsApiList: [
+                        "runtime.permission.requestAuthCode"
+                    ]
+                };
+                console.log(config);
+                DingTalkPC.config(config);
+
+                DingTalkPC.ready(function (res) {
+                    DingTalkPC.runtime.permission.requestAuthCode({
+                        corpId: "{{ corp_id }}",
+                        onSuccess: function (result) {
+                            var code = result.code;
+                            console.log("code = " + result.code);
+                            location.href = "/dingding/login/?code=" + code;
+                        },
+
+                        onFail: function (error) {
+                            console.error(error);
+                        }
+                    });
+                });
+
+                DingTalkPC.error(function (error) {
+                    console.error(error.errorCode);
+                    console.error(error.errorMessage);
+                });
+            });
+
+        </script>
+    {% elif from == "mobile" %}
+        <script>
+            $(document).ready(function () {
+                var config = {
+                    agentId: {{ agent_id }},
+                    corpId: "{{ corp_id }}",
+                    timeStamp: "{{ timestamp }}",
+                    nonceStr: "{{ noncestr }}",
+                    signature: "{{ signature }}",
+                    jsApiList: [
+                        "runtime.permission.requestAuthCode"
+                    ]
+                };
+                console.log(config);
+                dd.config(config);
+
+                dd.ready(function (res) {
+                    dd.runtime.permission.requestAuthCode({
+                        corpId: "{{ corp_id }}",
+                        onSuccess: function (result) {
+                            var code = result.code;
+                            console.log("code = " + result.code);
+                            location.href = "/dingding/login/?code=" + code;
+                        },
+
+                        onFail: function (error) {
+                            console.error(error);
+                        }
+                    });
+
+                    dd.error(function (error) {
+                        console.error(error.errorCode);
+                        console.error(error.errorMessage);
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

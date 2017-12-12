@@ -1,0 +1,8 @@
+<table>
+    {% for item in items %}
+    <tr>
+        <td style="width: 150px">{{ item.application.get_display_name }}</td>
+        <td>{{ item.get_display_name }}</td>
+    </tr>
+    {% endfor %}
+</table>
