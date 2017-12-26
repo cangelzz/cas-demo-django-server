@@ -1,0 +1,6 @@
+django==1.10.8
+django-mama-cas
+django-uuslug
+ldap3
+jsonfield
+
